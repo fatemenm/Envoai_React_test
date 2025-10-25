@@ -1,42 +1,26 @@
 .messy-layout {
-  position: relative;
-  margin-left: -20px;
-  padding-right: 100px;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
 }
 
 .messy-layout > div:first-child {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  width: 45%;
-  z-index: 2;
-  margin-top: 20px;
+  width: 60%;
 }
 
 .messy-layout > div:last-child {
-  position: absolute;
-  left: 10%;
-  top: 50px;
-  width: 60%;
-  z-index: 1;
-  margin-bottom: 30px;
+  flex-grow: 1;
+  flex-shrink: 1;
 }
 
-.messy-layout::after {
-  content: "";
-  display: block;
-  height: 800px;
-}
-
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+  .messy-layout {
+    flex-direction: column;
+  }
   .messy-layout > div:first-child {
-    left: 70%;
-    width: 80%;
+    width: 100%;
   }
-  
   .messy-layout > div:last-child {
-    left: 5%;
-    width: 90%;
+    width: 100%;
   }
 }
-

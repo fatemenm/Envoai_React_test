@@ -20,7 +20,7 @@
 .entry-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 1.5rem;
   margin-bottom: 1rem;
 }
 
@@ -88,14 +88,25 @@
 .delete-btn:hover {
   background: #c82333;
 }
+@media (max-width: 1024px) {
+  .entry-form button {
+    width: 10rem;
+    justify-self: end;
+  }
+}
+
+@media (max-width: 640px) {
+  .entry-form button {
+    width: 100%;
+  }
+}
 
 @media (max-width: 768px) {
   .entry-form {
     grid-template-columns: 1fr;
   }
-  
+
   .entry-form button {
     grid-column: span 1;
   }
 }
-

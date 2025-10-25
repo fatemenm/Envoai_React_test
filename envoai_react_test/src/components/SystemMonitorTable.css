@@ -145,11 +145,10 @@
   .stats-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .monitor-header {
     flex-direction: column;
     gap: 0.5rem;
     align-items: flex-start;
   }
 }
-
