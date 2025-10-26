@@ -1,69 +1,91 @@
-import { useState, useEffect } from 'react'
-import './BugHunt.css'
+import { useState, useEffect } from "react";
+import "./BugHunt.css";
 
 function BugHunt() {
-  const [counter, setCounter] = useState(0)
+  const [counter, setCounter] = useState(0);
   const [items, setItems] = useState([
-    { id: 1, name: 'Item 1', price: 10, quantity: 1 },
-    { id: 2, name: 'Item 2', price: 20, quantity: 2 },
-    { id: 3, name: 'Item 3', price: 15, quantity: 1 }
-  ])
-  const [discount, setDiscount] = useState(0)
-  const [username, setUsername] = useState('')
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+    { id: 1, name: "Item 1", price: 10, quantity: 1 },
+    { id: 2, name: "Item 2", price: 20, quantity: 2 },
+    { id: 3, name: "Item 3", price: 15, quantity: 1 },
+  ]);
+  const [discount, setDiscount] = useState(0);
+  const [username, setUsername] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // 🐞 State shouldn’t be in the dependency array and get updated inside the effect — it causes an infinite loop.
   useEffect(() => {
-    setCounter(counter + 1)
-  }, [counter])
+    const intervalId = setInterval(() => setCounter((prev) => prev + 1), 1000);
+    return () => clearInterval(intervalId);
+    // setCounter(counter + 1);
+    // }, [counter]);
+  }, []);
 
+  // 🐞 Item quantity should be multiplied by its price, not assigned to it.
   const calculateTotal = () => {
-    let total = 0
+    let total = 0;
     for (let i = 0; i < items.length; i++) {
-      total += items[i].price = items[i].quantity
+      total += items[i].price * items[i].quantity;
+      // total += items[i].price = items[i].quantity;
     }
-    return total
-  }
+    return total;
+  };
 
+  // 🐞 Discount should be divided by 100 and subtracted from the total.
   const applyDiscount = (total) => {
-    return total + (total * discount)
-  }
+    return total - total * (discount / 100);
+    // return total + total * discount;
+  };
 
+  // 🐞 isLoggedIn should be set to true.
   const handleLogin = () => {
     if (username.length < 3) {
-      alert('Username must be at least 3 characters')
-      return
+      alert("Username must be at least 3 characters");
+      return;
     }
-    setIsLoggedIn(false)
-  }
+    setIsLoggedIn(true);
+    // setIsLoggedIn(false);
+  };
 
+  // 🐞 isLoggedIn should be set to false.
   const handleLogout = () => {
-    setIsLoggedIn(true)
-    setUsername('')
-  }
+    setIsLoggedIn(false);
+    // setIsLoggedIn(true);
+    setUsername("");
+  };
 
+  // 🐞 The other properties (id, name) of the found object should be included in the returned object.
   const updateQuantity = (id, newQuantity) => {
-    setItems(items.map(item => 
-      item.id === id ? { quantity: newQuantity } : item
-    ))
-  }
+    setItems(
+      items.map((item) =>
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      )
+      // items.map((item) => (item.id === id ? { quantity: newQuantity } : item))
+    );
+  };
 
+  // 🐞 The callback condition should be reversed to return the remaining items.
   const removeItem = (id) => {
-    setItems(items.filter(item => item.id == id))
-  }
+    setItems(items.filter((item) => item.id != id));
+    // setItems(items.filter((item) => item.id == id));
+  };
 
-  const total = calculateTotal()
-  const finalTotal = applyDiscount(total)
-
+  const total = calculateTotal();
+  const finalTotal = applyDiscount(total);
   return (
     <div className="page-container">
       <h2 className="page-title">Challenge 2: Bug Hunt</h2>
-      
+
       <div className="instructions">
         <h3>Your Task:</h3>
         <ul>
-          <li>This page contains <strong>6 logical bugs</strong> that need to be fixed</li>
+          <li>
+            This page contains <strong>6 logical bugs</strong> that need to be
+            fixed
+          </li>
           <li>The bugs are in the component logic, not in styling</li>
-          <li>Test all features to identify what&apos;s not working correctly:</li>
+          <li>
+            Test all features to identify what&apos;s not working correctly:
+          </li>
           <ul>
             <li>Counter behavior</li>
             <li>Shopping cart total calculation</li>
@@ -81,7 +103,9 @@ function BugHunt() {
         <div className="section">
           <h3>Counter Feature</h3>
           <p>Counter: {counter}</p>
-          <p className="hint">⚠️ Check the browser console and watch the counter behavior</p>
+          <p className="hint">
+            ⚠️ Check the browser console and watch the counter behavior
+          </p>
         </div>
 
         {/* Login Section */}
@@ -121,7 +145,7 @@ function BugHunt() {
               </tr>
             </thead>
             <tbody>
-              {items.map(item => (
+              {items.map((item) => (
                 <tr key={item.id}>
                   <td>{item.name}</td>
                   <td>${item.price}</td>
@@ -129,14 +153,16 @@ function BugHunt() {
                     <input
                       type="number"
                       value={item.quantity}
-                      onChange={(e) => updateQuantity(item.id, parseInt(e.target.value) || 0)}
+                      onChange={(e) =>
+                        updateQuantity(item.id, parseInt(e.target.value) || 0)
+                      }
                       min="0"
-                      style={{ width: '60px' }}
+                      style={{ width: "60px" }}
                     />
                   </td>
                   <td>${(item.price * item.quantity).toFixed(2)}</td>
                   <td>
-                    <button 
+                    <button
                       onClick={() => removeItem(item.id)}
                       className="remove-btn"
                     >
@@ -153,7 +179,7 @@ function BugHunt() {
               <span>Subtotal:</span>
               <span>${total.toFixed(2)}</span>
             </div>
-            
+
             <div className="discount-input">
               <label>Discount (%):</label>
               <input
@@ -162,16 +188,16 @@ function BugHunt() {
                 onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)}
                 min="0"
                 max="100"
-                style={{ width: '80px' }}
+                style={{ width: "80px" }}
               />
             </div>
-            
+
             <div className="total-row final">
               <span>Final Total:</span>
               <span>${finalTotal.toFixed(2)}</span>
             </div>
           </div>
-          
+
           <p className="hint">
             Try: updating quantities, removing items, and applying a discount
           </p>
@@ -182,15 +208,22 @@ function BugHunt() {
         <h3>📝 Bug Report Template</h3>
         <p>Document your findings:</p>
         <ol>
-          <li><strong>Bug Location:</strong> Where is the bug?</li>
-          <li><strong>Expected Behavior:</strong> What should happen?</li>
-          <li><strong>Actual Behavior:</strong> What actually happens?</li>
-          <li><strong>Fix Applied:</strong> How did you fix it?</li>
+          <li>
+            <strong>Bug Location:</strong> Where is the bug?
+          </li>
+          <li>
+            <strong>Expected Behavior:</strong> What should happen?
+          </li>
+          <li>
+            <strong>Actual Behavior:</strong> What actually happens?
+          </li>
+          <li>
+            <strong>Fix Applied:</strong> How did you fix it?
+          </li>
         </ol>
       </div>
     </div>
-  )
+  );
 }
 
-export default BugHunt
-
+export default BugHunt;
