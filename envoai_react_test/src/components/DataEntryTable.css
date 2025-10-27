@@ -95,12 +95,6 @@
   }
 }
 
-@media (max-width: 640px) {
-  .entry-form button {
-    width: 100%;
-  }
-}
-
 @media (max-width: 768px) {
   .entry-form {
     grid-template-columns: 1fr;
@@ -108,5 +102,17 @@
 
   .entry-form button {
     grid-column: span 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .entry-form button {
+    width: 100%;
+  }
+  .entries-table {
+    margin-top: 1rem;
+    width: 80vw;
+    display: block;
+    overflow-x: auto;
   }
 }

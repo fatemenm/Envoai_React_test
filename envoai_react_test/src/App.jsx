@@ -1,7 +1,7 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import './App.css'
-import LayoutChallenge from './pages/LayoutChallenge'
-import BugHunt from './pages/BugHunt'
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import "./App.css";
+import LayoutChallenge from "./pages/LayoutChallenge";
+import BugHunt from "./pages/BugHunt";
 
 function App() {
   return (
@@ -10,11 +10,15 @@ function App() {
         <nav className="navigation">
           <h1>Junior Frontend Developer Assessment</h1>
           <div className="nav-links">
-            <Link to="/" className="nav-link">Challenge 1: Layout Fix</Link>
-            <Link to="/bug-hunt" className="nav-link">Challenge 2: Bug Hunt</Link>
+            <Link to="/" className="nav-link">
+              Challenge 1: Layout Fix
+            </Link>
+            <Link to="/bug-hunt" className="nav-link">
+              Challenge 2: Bug Hunt
+            </Link>
           </div>
         </nav>
-        
+
         <main className="main-content">
           <Routes>
             <Route path="/" element={<LayoutChallenge />} />
@@ -23,7 +27,7 @@ function App() {
         </main>
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
