@@ -1,85 +1,101 @@
-import { useState, useEffect } from 'react'
-import './DataEntryTable.css'
+import { useState, useEffect } from "react";
+import "./DataEntryTable.css";
 
 function DataEntryTable() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    department: '',
-    phone: ''
-  })
-  
-  const [entries, setEntries] = useState([])
+    name: "",
+    email: "",
+    department: "",
+    phone: "",
+  });
 
+  const [entries, setEntries] = useState([]);
+
+  // Get and save data from localStorage to state on component mount.
   useEffect(() => {
-    const savedData = localStorage.getItem('userEntries')
+    const savedData = localStorage.getItem("userEntries");
     if (savedData) {
       try {
-        setEntries(JSON.parse(savedData))
+        setEntries(JSON.parse(savedData));
       } catch (error) {
-        console.error('Error loading data:', error)
+        console.error("Error loading data:", error);
       }
     }
-  }, [])
+  }, []);
 
-  useEffect(() => {
-    if (entries.length > 0) {
-      localStorage.setItem('userEntries', JSON.stringify(entries))
-    }
-  }, [entries])
+  // 🐞 Re-rendering the component on every change just to save to localStorage is inefficient.
+  // useEffect(() => {
+  //   if (entries.length > 0) {
+  //     console.log("saving entries to local storage: ", entries);
+  //     localStorage.setItem("userEntries", JSON.stringify(entries));
+  //   }
+  // }, [entries]);
 
+  // Save updated input data to form state using an updater function.
   const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
+    const { name, value } = e.target;
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
-    }))
-  }
-
+      [name]: value,
+    }));
+  };
+  // Add entry: validate form, create new entry, update state, and reset inputs.
   const handleSubmit = (e) => {
-    e.preventDefault()
-    
-    if (!formData.name || !formData.email || !formData.department || !formData.phone) {
-      alert('Please fill in all fields')
-      return
+    e.preventDefault();
+
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.department ||
+      !formData.phone
+    ) {
+      alert("Please fill in all fields");
+      return;
     }
 
     const newEntry = {
       ...formData,
       id: Date.now(),
-      timestamp: new Date().toLocaleString()
-    }
+      timestamp: new Date().toLocaleString(),
+    };
 
-    setEntries(prev => [...prev, newEntry])
-    
+    setEntries((prev) => {
+      const newEntries = [...prev, newEntry];
+      // ✅ Saving the entry to localStorage should be done here.
+      localStorage.setItem("userEntries", JSON.stringify(newEntries));
+      return newEntries;
+    });
+
     setFormData({
-      name: '',
-      email: '',
-      department: '',
-      phone: ''
-    })
-  }
+      name: "",
+      email: "",
+      department: "",
+      phone: "",
+    });
+  };
 
+  // Delete entry: update state and save to localStorage.
   const handleDelete = (id) => {
-    setEntries(prev => {
-      const updated = prev.filter(entry => entry.id !== id)
-      localStorage.setItem('userEntries', JSON.stringify(updated))
-      return updated
-    })
-  }
+    setEntries((prev) => {
+      const updated = prev.filter((entry) => entry.id !== id);
+      localStorage.setItem("userEntries", JSON.stringify(updated));
+      return updated;
+    });
+  };
 
+  // Remove all entries: confirm with the user (using the confirm API), then reset state and localStorage.
   const handleClearAll = () => {
-    if (window.confirm('Are you sure you want to clear all entries?')) {
-      setEntries([])
-      localStorage.removeItem('userEntries')
+    if (window.confirm("Are you sure you want to clear all entries?")) {
+      setEntries([]);
+      localStorage.removeItem("userEntries");
     }
-  }
+  };
 
   return (
     <div className="data-entry-container">
       <h3>User Data Entry Form</h3>
       <p className="subtitle">Enter 4 parameters and save to local database</p>
-      
+
       <form onSubmit={handleSubmit} className="entry-form">
         <div className="form-group">
           <label htmlFor="name">Name:</label>
@@ -157,7 +173,7 @@ function DataEntryTable() {
               </tr>
             </thead>
             <tbody>
-              {entries.map(entry => (
+              {entries.map((entry) => (
                 <tr key={entry.id}>
                   <td>{entry.name}</td>
                   <td>{entry.email}</td>
@@ -165,7 +181,7 @@ function DataEntryTable() {
                   <td>{entry.phone}</td>
                   <td>{entry.timestamp}</td>
                   <td>
-                    <button 
+                    <button
                       onClick={() => handleDelete(entry.id)}
                       className="delete-btn"
                     >
@@ -179,8 +195,7 @@ function DataEntryTable() {
         )}
       </div>
     </div>
-  )
+  );
 }
 
-export default DataEntryTable
-
+export default DataEntryTable;
