@@ -88,14 +88,14 @@
 .delete-btn:hover {
   background: #c82333;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1280px) {
   .entry-form button {
     width: 10rem;
     justify-self: end;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .entry-form {
     grid-template-columns: 1fr;
   }

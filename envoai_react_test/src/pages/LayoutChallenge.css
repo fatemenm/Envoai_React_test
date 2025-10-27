@@ -8,12 +8,7 @@
   width: 60%;
 }
 
-.messy-layout > div:last-child {
-  flex-grow: 1;
-  flex-shrink: 1;
-}
-
-@media (max-width: 1024px) {
+@media (max-width: 1280px) {
   .messy-layout {
     flex-direction: column;
   }
