@@ -23,7 +23,8 @@ function DataEntryTable() {
     }
   }, []);
 
-  // 🐞 Re-rendering the component on every change just to save to localStorage is inefficient.
+  // 🐞 Saving data to localStorage on every change is unnecessary.
+  // Deleting or adding entries should be handled in their respective handlers.
   // useEffect(() => {
   //   if (entries.length > 0) {
   //     console.log("saving entries to local storage: ", entries);
@@ -61,7 +62,7 @@ function DataEntryTable() {
 
     setEntries((prev) => {
       const newEntries = [...prev, newEntry];
-      // ✅ Saving the entry to localStorage should be done here.
+      // ✅ Saving to localStorage should be done here when adding a new entry.
       localStorage.setItem("userEntries", JSON.stringify(newEntries));
       return newEntries;
     });
