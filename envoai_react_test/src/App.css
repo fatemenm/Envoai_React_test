@@ -48,11 +48,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
+  padding: 4em;
 }
 
 .page-container {
   background: white;
+  width: 100%;
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -143,4 +144,10 @@ table th {
 
 table tr:hover {
   background: #f8f9fa;
+}
+@media (max-width: 640px) {
+  .main-content {
+    padding: 2em;
+    margin: 0 auto;
+  }
 }

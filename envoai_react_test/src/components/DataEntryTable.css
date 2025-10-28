@@ -105,14 +105,17 @@
   }
 }
 
+@media (max-width: 768px) {
+  .entries-table {
+    margin-top: 1rem;
+    width: 100%;
+    display: block;
+    overflow-x: auto;
+  }
+}
+
 @media (max-width: 640px) {
   .entry-form button {
     width: 100%;
-  }
-  .entries-table {
-    margin-top: 1rem;
-    width: 80vw;
-    display: block;
-    overflow-x: auto;
   }
 }
