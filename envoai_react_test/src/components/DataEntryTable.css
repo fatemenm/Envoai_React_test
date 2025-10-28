@@ -95,16 +95,6 @@
   }
 }
 
-@media (max-width: 640px) {
-  .entry-form {
-    grid-template-columns: 1fr;
-  }
-
-  .entry-form button {
-    grid-column: span 1;
-  }
-}
-
 @media (max-width: 768px) {
   .entries-table {
     margin-top: 1rem;
@@ -115,7 +105,11 @@
 }
 
 @media (max-width: 640px) {
+  .entry-form {
+    grid-template-columns: 1fr;
+  }
   .entry-form button {
+    grid-column: span 1;
     width: 100%;
   }
 }

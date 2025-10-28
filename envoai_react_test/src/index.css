@@ -69,6 +69,6 @@ button:focus-visible {
 
 @media (max-width: 425px) {
   :root {
-    font-size: 0.5em;
+    font-size: 0.7em;
   }
 }
