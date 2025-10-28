@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import './SystemMonitorTable.css'
+import { useState, useEffect } from "react";
+import "./SystemMonitorTable.css";
 
 function SystemMonitorTable() {
   const [systemStats, setSystemStats] = useState({
@@ -7,67 +7,78 @@ function SystemMonitorTable() {
     ramTotal: 16,
     cpuUsage: 0,
     networkSpeed: 0,
-    diskUsage: 0
-  })
+    diskUsage: 0,
+  });
 
-  const [isMonitoring, setIsMonitoring] = useState(true)
+  const [isMonitoring, setIsMonitoring] = useState(true);
 
+  // System stats update logic using setInterval; handle when to stop monitoring and clear timerId whenever isMonitoring changes.
   useEffect(() => {
-    if (!isMonitoring) return
-
+    if (!isMonitoring) return;
+    const startTime = Date.now();
     const interval = setInterval(() => {
+      // Calculate the time elapsed between setting the interval and updating the stats.
+      console.log(
+        "updating stats:",
+        Math.floor((Date.now() - startTime) / 1000)
+      );
       setSystemStats({
         ramUsed: (4 + Math.random() * 10).toFixed(2),
         ramTotal: 16,
         cpuUsage: (10 + Math.random() * 80).toFixed(1),
         networkSpeed: (0.5 + Math.random() * 99.5).toFixed(2),
-        diskUsage: (45 + Math.random() * 40).toFixed(1)
-      })
-    }, 2000)
+        diskUsage: (45 + Math.random() * 40).toFixed(1),
+      });
+    }, 2000);
 
-    return () => clearInterval(interval)
-  }, [isMonitoring])
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isMonitoring]);
 
+  // Define class names for resources based on their status.
   const getStatusColor = (value, thresholds) => {
-    if (value < thresholds.good) return 'status-good'
-    if (value < thresholds.warning) return 'status-warning'
-    return 'status-critical'
-  }
+    if (value < thresholds.good) return "status-good";
+    if (value < thresholds.warning) return "status-warning";
+    return "status-critical";
+  };
 
+  // Generate status class names for each resource by formatting current values and defining thresholds.
   const getCpuStatus = () => {
-    const cpu = parseFloat(systemStats.cpuUsage)
-    return getStatusColor(cpu, { good: 50, warning: 75 })
-  }
+    const cpu = parseFloat(systemStats.cpuUsage);
+    return getStatusColor(cpu, { good: 50, warning: 75 });
+  };
 
   const getRamStatus = () => {
-    const percentage = (systemStats.ramUsed / systemStats.ramTotal) * 100
-    return getStatusColor(percentage, { good: 60, warning: 80 })
-  }
+    const percentage = (systemStats.ramUsed / systemStats.ramTotal) * 100;
+    return getStatusColor(percentage, { good: 60, warning: 80 });
+  };
 
   const getDiskStatus = () => {
-    const disk = parseFloat(systemStats.diskUsage)
-    return getStatusColor(disk, { good: 60, warning: 80 })
-  }
+    const disk = parseFloat(systemStats.diskUsage);
+    return getStatusColor(disk, { good: 60, warning: 80 });
+  };
 
   const getNetworkStatus = () => {
-    const speed = parseFloat(systemStats.networkSpeed)
-    if (speed > 50) return 'status-good'
-    if (speed > 10) return 'status-warning'
-    return 'status-critical'
-  }
+    const speed = parseFloat(systemStats.networkSpeed);
+    if (speed > 50) return "status-good";
+    if (speed > 10) return "status-warning";
+    return "status-critical";
+  };
 
   return (
     <div className="system-monitor-container">
       <div className="monitor-header">
         <h3>System Resource Monitor</h3>
-        <button 
+        {/* Active and inactive monitoring functionality */}
+        <button
           onClick={() => setIsMonitoring(!isMonitoring)}
-          className={isMonitoring ? 'monitoring-active' : 'monitoring-paused'}
+          className={isMonitoring ? "monitoring-active" : "monitoring-paused"}
         >
-          {isMonitoring ? '⏸ Pause' : '▶ Resume'}
+          {isMonitoring ? "⏸ Pause" : "▶ Resume"}
         </button>
       </div>
-      
+
       <p className="subtitle">Real-time hardware resource monitoring</p>
 
       <div className="stats-grid">
@@ -82,9 +93,13 @@ function SystemMonitorTable() {
               {((systemStats.ramUsed / systemStats.ramTotal) * 100).toFixed(1)}%
             </div>
             <div className="progress-bar">
-              <div 
+              <div
                 className="progress-fill"
-                style={{ width: `${(systemStats.ramUsed / systemStats.ramTotal) * 100}%` }}
+                style={{
+                  width: `${
+                    (systemStats.ramUsed / systemStats.ramTotal) * 100
+                  }%`,
+                }}
               ></div>
             </div>
           </div>
@@ -96,11 +111,15 @@ function SystemMonitorTable() {
             <h4>CPU Usage</h4>
             <div className="stat-value">{systemStats.cpuUsage}%</div>
             <div className="stat-percentage">
-              {parseFloat(systemStats.cpuUsage) < 50 ? 'Normal' : 
-               parseFloat(systemStats.cpuUsage) < 75 ? 'Moderate' : 'High'}
+              {/* Conditional rendering with a nested ternary operator */}
+              {parseFloat(systemStats.cpuUsage) < 50
+                ? "Normal"
+                : parseFloat(systemStats.cpuUsage) < 75
+                ? "Moderate"
+                : "High"}
             </div>
             <div className="progress-bar">
-              <div 
+              <div
                 className="progress-fill"
                 style={{ width: `${systemStats.cpuUsage}%` }}
               ></div>
@@ -114,13 +133,21 @@ function SystemMonitorTable() {
             <h4>Network Speed</h4>
             <div className="stat-value">{systemStats.networkSpeed} Mbps</div>
             <div className="stat-percentage">
-              {parseFloat(systemStats.networkSpeed) > 50 ? 'Fast' : 
-               parseFloat(systemStats.networkSpeed) > 10 ? 'Moderate' : 'Slow'}
+              {parseFloat(systemStats.networkSpeed) > 50
+                ? "Fast"
+                : parseFloat(systemStats.networkSpeed) > 10
+                ? "Moderate"
+                : "Slow"}
             </div>
             <div className="progress-bar">
-              <div 
+              <div
                 className="progress-fill"
-                style={{ width: `${Math.min(parseFloat(systemStats.networkSpeed), 100)}%` }}
+                style={{
+                  width: `${Math.min(
+                    parseFloat(systemStats.networkSpeed),
+                    100
+                  )}%`,
+                }}
               ></div>
             </div>
           </div>
@@ -132,11 +159,14 @@ function SystemMonitorTable() {
             <h4>Disk Usage</h4>
             <div className="stat-value">{systemStats.diskUsage}%</div>
             <div className="stat-percentage">
-              {parseFloat(systemStats.diskUsage) < 60 ? 'Healthy' : 
-               parseFloat(systemStats.diskUsage) < 80 ? 'Moderate' : 'High'}
+              {parseFloat(systemStats.diskUsage) < 60
+                ? "Healthy"
+                : parseFloat(systemStats.diskUsage) < 80
+                ? "Moderate"
+                : "High"}
             </div>
             <div className="progress-bar">
-              <div 
+              <div
                 className="progress-fill"
                 style={{ width: `${systemStats.diskUsage}%` }}
               ></div>
@@ -147,14 +177,14 @@ function SystemMonitorTable() {
 
       <div className="monitor-info">
         <p>
-          <strong>Note:</strong> This is a simulated system monitor. 
-          In production, this would connect to actual system APIs or backend services.
-          {isMonitoring && ' Updates every 2 seconds.'}
+          <strong>Note:</strong> This is a simulated system monitor. In
+          production, this would connect to actual system APIs or backend
+          services.
+          {isMonitoring && " Updates every 2 seconds."}
         </p>
       </div>
     </div>
-  )
+  );
 }
 
-export default SystemMonitorTable
-
+export default SystemMonitorTable;
