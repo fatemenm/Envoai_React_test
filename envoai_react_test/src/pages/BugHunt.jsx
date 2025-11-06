@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import "./BugHunt.css";
 
+const defaultItems = [
+  { id: 1, name: "Item 1", price: 10, quantity: 1 },
+  { id: 2, name: "Item 2", price: 20, quantity: 2 },
+  { id: 3, name: "Item 3", price: 15, quantity: 1 },
+];
+
 function BugHunt() {
   const [counter, setCounter] = useState(0);
-  const [items, setItems] = useState([
-    { id: 1, name: "Item 1", price: 10, quantity: 1 },
-    { id: 2, name: "Item 2", price: 20, quantity: 2 },
-    { id: 3, name: "Item 3", price: 15, quantity: 1 },
-  ]);
+  const [items, setItems] = useState([]);
   const [discount, setDiscount] = useState(0);
   const [username, setUsername] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,6 +17,10 @@ function BugHunt() {
   // 🐞 State shouldn’t be in the dependency array and get updated inside the effect — it causes an infinite loop.
   useEffect(() => {
     const intervalId = setInterval(() => setCounter((prev) => prev + 1), 1000);
+    // Initialize state from localStorage on mount if data exists.
+    const shoppingData = localStorage.getItem("items");
+    const items = JSON.parse(shoppingData);
+    setItems(items ? items : defaultItems);
     return () => clearInterval(intervalId);
     // setCounter(counter + 1);
     // }, [counter]);
@@ -65,7 +71,12 @@ function BugHunt() {
 
   // 🐞 The callback condition should be reversed to return the remaining items.
   const removeItem = (id) => {
-    setItems(items.filter((item) => item.id != id));
+    setItems(() => {
+      const newItems = items.filter((item) => item.id != id);
+      // save changed items in local storage
+      localStorage.setItem("items", JSON.stringify(newItems));
+      return newItems;
+    });
     // setItems(items.filter((item) => item.id == id));
   };
 
